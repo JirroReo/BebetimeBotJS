@@ -120,7 +120,7 @@ let cYear = currentDate.getFullYear()
 let cRightNow = cDay + "-" + cMonth + "-" + cYear + ".txt"
 
   console.log(`Logged in as ${client.user.tag}!`)
-  fs.writeFile("logs/" + cRightNow, cRightNow + ` Logged in as ${client.user.tag}! \n`, { flag: 'a+' }, function (err) {
+  fs.writeFile("logs/" + cRightNow,` Logged in as ${client.user.tag}! \n`, { flag: 'a+' }, function (err) {
         if (err) throw err;
     });
 })
