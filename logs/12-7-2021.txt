@@ -40,3 +40,40 @@ Logged in as Bebetime Bot#0288!
 3:47 -> 616261191614070795: 지로: $dog
  Logged in as Bebetime Bot#0288! 
 3:48 -> 616261191614070795: 지로: $dog
+3:49 -> 616261191614070795: 지로: $dog
+3:50 -> 616261191614070795: 지로: $dog
+6:46 -> 616261191614070795: 지로: $cat
+6:46 -> 616261191614070795: 지로: $dog
+6:46 -> 616261191614070795: 지로: sad
+6:46 -> 616261191614070795: 지로: Im sad
+7:5 -> 616261191614070795: 지로: $ping
+7:5 -> 616261191614070795: 지로: $inspire
+7:5 -> 616261191614070795: 지로: $inspire
+ Logged in as Bebetime Bot#0288! 
+ Logged in as Bebetime Bot#0288! 
+ Logged in as Bebetime Bot#0288! 
+13:45 -> 616261191614070795: 지로: $ask is this working
+ Logged in as Bebetime Bot#0288! 
+13:47 -> 616261191614070795: 지로: $ask is this working
+ Logged in as Bebetime Bot#0288! 
+13:49 -> 616261191614070795: 지로: $ask is this working
+13:54 -> 616261191614070795: 지로: $dog
+13:54 -> 616261191614070795: 지로: $dog
+ Logged in as Bebetime Bot#0288! 
+13:55 -> 616261191614070795: 지로: $ask yes?
+ Logged in as Bebetime Bot#0288! 
+13:55 -> 616261191614070795: 지로: $ask yes?
+ Logged in as Bebetime Bot#0288! 
+13:58 -> 616261191614070795: 지로: $ask
+13:58 -> 616261191614070795: 지로: $ask yes
+ Logged in as Bebetime Bot#0288! 
+14:15 -> 616261191614070795: 지로: $ask try
+ Logged in as Bebetime Bot#0288! 
+ Logged in as Bebetime Bot#0288! 
+14:21 -> 616261191614070795: 지로: $contact
+ Logged in as Bebetime Bot#0288! 
+14:24 -> 616261191614070795: 지로: $contact
+ Logged in as Bebetime Bot#0288! 
+14:25 -> 616261191614070795: 지로: $contact
+ Logged in as Bebetime Bot#0288! 
+14:27 -> 616261191614070795: 지로: $contact

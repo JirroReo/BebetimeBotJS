@@ -97,6 +97,14 @@ function getDog(){
   })
 }
 
+function getYesNo(){
+  return fetch("https://yesno.wtf/api").then(res => {
+    return res.json()
+  }).then(data => {
+    return data["answer"]
+  })
+}
+
 function logCommand(msg){
 
     let currentDate = new Date();
@@ -189,6 +197,19 @@ client.on("message", msg => {
       })
     }
   })
+
+  if(msg.content.startsWith("$ask")){
+    logCommand(msg);
+    question = msg.content.split("$ask ")[1]
+    if (question){    
+        msg.channel.send("Question: *" + question + "?*\n")
+        getYesNo().then(res => {
+            msg.channel.send("Answer: _**" + res + "!**_")
+        })
+    } else {
+        msg.channel.send("`Usage: $ask <question>`")
+    }
+  }
   
   if(msg.content.startsWith("$new")){
     logCommand(msg);
@@ -216,6 +237,35 @@ client.on("message", msg => {
   if(msg.content === "juliet"){
     logCommand(msg);
     msg.reply("titi");
+  }
+
+  if(msg.content === "$contact"){
+    logCommand(msg);
+    let contact = [
+        "**Twitter** https://www.twitter.com/xreoji",
+        "**GitHub** https://www.github.com/JirroReo",
+        "**My source code** https://www.github.com/JirroReo/BebetimeBotJS"
+    ]
+    msg.channel.send(contact);
+  }
+
+  if(msg.content === "$help"){
+   let help = [
+   "Prefix is `$`",
+   "**help** = Sends this message.",
+   "**contact** = Author contact information.",
+   "**cat** = Sends a random picture, gif, or video of a cat.",
+   "**dog** = Like **cat** but dog.",
+   "**fox** = Like **dog** but smaller and dont bark.",
+   "**new [message]** = Adds message to responses for sad messages.",
+   "**list** = Lists all responses for sad messages",
+   "**del [index]** = Deletes message at index from sad message reponses.",
+   "**responding [on/off]** = Sets wether the bot responds to sad messages.",
+   "**ping** = Checks for server availability, bot will reply `pong` if yes.",
+   "**inspire** = Gives a random inspirational quote.",
+   "**ask** = Answers questions with a random yes or no."
+  ];
+    msg.channel.send(help)
   }
 
   if(msg.content.startsWith("$responding")){
