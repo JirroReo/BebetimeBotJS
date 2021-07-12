@@ -103,7 +103,7 @@ client.on("message", msg => {
     let cYear = currentDate.getFullYear()
     let cRightNow = cDay + "-" + cMonth + "-" + cYear + ".txt"
 
-  fs.writeFile(cRightNow, + currentDate.getHours() +":" + currentDate.getMinutes() + "->" + msg.author.username + ": " + msg.author.id + "\n " + msg.content, (err) => {
+  fs.writeFile("logs/" + cRightNow, + currentDate.getHours() +":" + currentDate.getMinutes() + "->" + msg.author.username + ": " + msg.author.id + "\n " + msg.content, (err) => {
 
     // In case of a error throw err.
     if (err) throw err;
