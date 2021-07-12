@@ -89,6 +89,28 @@ function getFox(){
   })
 }
 
+function getDog(){
+  return fetch("https://random.dog/woof.json?ref=apilist.fun").then(res => {
+    return res.json()
+  }).then(data => {
+    return data["url"]
+  })
+}
+
+function logCommand(msg){
+
+    let currentDate = new Date();
+    let cDay = currentDate.getDate()
+    let cMonth = currentDate.getMonth() + 1
+    let cYear = currentDate.getFullYear()
+    let cRightNow = cDay + "-" + cMonth + "-" + cYear + ".txt"
+
+    fs.writeFile("logs/" + cRightNow, currentDate.getHours() +":" + currentDate.getMinutes() + " -> " + msg.author.id + ": " + msg.author.username + ": " + msg.content + "\n", { flag: 'a+' }, function (err) {
+        if (err) throw err;
+    })
+
+    console.log(msg.author.username + ": " + msg.author.id + ": " + msg.content);
+}
 
 client.on("ready", () => {
 let currentDate = new Date();
@@ -106,40 +128,33 @@ let cRightNow = cDay + "-" + cMonth + "-" + cYear + ".txt"
 client.on("message", msg => {
   if(msg.author.bot) return
 
-    let currentDate = new Date();
-    let cDay = currentDate.getDate()
-    let cMonth = currentDate.getMonth() + 1
-    let cYear = currentDate.getFullYear()
-    let cRightNow = cDay + "-" + cMonth + "-" + cYear + ".txt"
-
-  if(msg.content.startsWith('$') || msg.content === "ily" || msg.content === "Ily" || msg.content === "i love you" || msg.content === "I love you" || msg.content === "juliet" || msg.content.startsWith("Wyd") || msg.content.startsWith("wyd") || msg.content === "gawa nyo" || triggerSad.some(word => msg.content.includes(word))){
-
-      fs.writeFile("logs/" + cRightNow, currentDate.getHours() +":" + currentDate.getMinutes() + " -> " + msg.author.id + ": " + msg.author.username + ": " + msg.content + "\n", { flag: 'a+' }, function (err) {
-        if (err) throw err;
-    });
-
-      console.log(msg.author.username + ": " + msg.author.id + ": " + msg.content);
-  }
-
-  
   if(msg.content === "$ping"){
+    logCommand(msg);
     msg.reply("pong")
   }
   
   if(msg.content === "$inspire"){
+    logCommand(msg);
     getQuote().then(quote => msg.channel.send(quote))
   }
 
   if(msg.content === "$cat" || msg.content === "$Cat"){
+    logCommand(msg);
     getCat().then(cat => msg.channel.send(cat))
   }
 
   if(msg.content === "$fox" || msg.content === "$Fox"){
+    logCommand(msg);
     getFox().then(fox => msg.channel.send(fox))
   }
 
+  if(msg.content === "$dog" || msg.content === "$Dog"){
+    logCommand(msg);
+    getDog().then(dog => msg.channel.send(dog))
+  }
+
   if(msg.content === "ily" || msg.content === "Ily" || msg.content === "i love you"){
-      console.log(msg.author.username + ": " + msg.author.id);
+      logCommand(msg);
       if(msg.author.id == "748392260990795826" || msg.author.id == "820977885603037216"){ //Olet 
         var randomElement = panlandi[Math.floor(Math.random() * panlandi.length)];
           msg.reply(randomElement);
@@ -148,14 +163,18 @@ client.on("message", msg => {
           msg.reply(randomElement + "<333");
       }
   }
+
   if(msg.content === "hi"){
+    logCommand(msg);
     msg.reply("hi");
   }
   
   if(msg.content === "$olet"){
+    logCommand(msg);
     msg.reply("Hi babyyyyy!")
   }
   if(msg.content.startsWith("Wyd") || msg.content.startsWith("wyd") || msg.content === "gawa nyo"){
+    logCommand(msg);
     var randomElement = wyd[Math.floor(Math.random() * wyd.length)];
           msg.reply(randomElement);
   }
@@ -164,24 +183,29 @@ client.on("message", msg => {
       if(responding && triggerSad.some(word => msg.content.includes(word))){
       db.get("respSad").then(respSad => {
         const response = respSad[Math.floor(Math.random()*respSad.length)]
+
+      logCommand(msg);
       msg.reply(response)
       })
     }
   })
   
   if(msg.content.startsWith("$new")){
+    logCommand(msg);
     respSadMessage = msg.content.split("$new ")[1]
     updateRespSad(respSadMessage)
     msg.channel.send("Entry added!")
   }
 
   if(msg.content.startsWith("$del")){
+    logCommand(msg);
     index = parseInt(msg.content.split("$del ")[1])
     deleteRespSad(index)
     msg.channel.send("Entry deleted!")
   }
 
   if(msg.content.startsWith("$list")){
+    logCommand(msg);
     db.get("respSad").then(respSad => {
       msg.channel.send(respSad)
     })
@@ -190,10 +214,12 @@ client.on("message", msg => {
 
   
   if(msg.content === "juliet"){
+    logCommand(msg);
     msg.reply("titi");
   }
 
   if(msg.content.startsWith("$responding")){
+    logCommand(msg);
     value = msg.content.split("$responding ")[1]
 
     if(value.toLowerCase() == "on"){
