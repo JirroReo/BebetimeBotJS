@@ -2,6 +2,7 @@ const Discord = require("discord.js")
 const fetch = require("node-fetch")
 //const keepAlive = require("./server")
 const Database = require("@replit/database")
+const fs = require('fs')
 
 
 const db = new Database()
@@ -95,6 +96,18 @@ client.on("ready", () => {
 
 client.on("message", msg => {
   if(msg.author.bot) return
+
+    let currentDate = new Date();
+    let cDay = currentDate.getDate()
+    let cMonth = currentDate.getMonth() + 1
+    let cYear = currentDate.getFullYear()
+    let cRightNow = cDay + "-" + cMonth + "-" + cYear + ".txt"
+
+  fs.writeFile(cRightNow, + currentDate.getHours() +":" + currentDate.getMinutes() + "->" + msg.author.username + ": " + msg.author.id + "\n " + msg.content, (err) => {
+
+    // In case of a error throw err.
+    if (err) throw err;
+    })
 
   if(msg.content.startsWith('$') || msg.content === "ily" || msg.content === "Ily" || msg.content === "i love you" || msg.content === "juliet"){
       console.log(msg.author.username + ": " + msg.author.id + "\n " + msg.content);
