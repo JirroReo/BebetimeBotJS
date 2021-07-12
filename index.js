@@ -15,10 +15,10 @@ const initialRespSad = [
 ]
 const panlandi = [
     "(♡˙︶˙♡) I love u too baby (/ε＼*)",
-    "(´｡• ᵕ •｡`) ♡ i wuv u 2 bb Owet (´｡• ᵕ •｡`) ♡",
+    "(´｡• ᵕ •｡`) ♡ i wuv u 2 bb Owet ('｡• ᵕ •｡') ♡",
     "ヽ(♡‿♡)ノ I love u more Julia ヽ(♡‿♡)ノ",
-    "nah i love u more (´｡• ω •｡`) ♡ bitch ♡ (´｡• ω •｡`)",
-    "(´,,•ω•,,)♡ ehehehehehehehe i love u too ehehehehehehe (´,,•ω•,,)♡"
+    "nah i love u more ('｡• ω •｡') ♡ bitch ♡ ('｡• ω •｡')",
+    "(',,•ω•,,)♡ ehehehehehehehe i love u too ehehehehehehe (',,•ω•,,)♡"
 ]
 const plainIly = [
     "i love you too baby ",
