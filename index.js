@@ -91,7 +91,16 @@ function getFox(){
 
 
 client.on("ready", () => {
+let currentDate = new Date();
+let cDay = currentDate.getDate()
+let cMonth = currentDate.getMonth() + 1
+let cYear = currentDate.getFullYear()
+let cRightNow = cDay + "-" + cMonth + "-" + cYear + ".txt"
+
   console.log(`Logged in as ${client.user.tag}!`)
+  fs.writeFile("logs/" + cRightNow, `Logged in as ${client.user.tag}! \n`, { flag: 'a+' }, function (err) {
+        if (err) throw err;
+    });
 })
 
 client.on("message", msg => {
@@ -103,14 +112,13 @@ client.on("message", msg => {
     let cYear = currentDate.getFullYear()
     let cRightNow = cDay + "-" + cMonth + "-" + cYear + ".txt"
 
-  fs.writeFile(cRightNow, + currentDate.getHours() +":" + currentDate.getMinutes() + "->" + msg.author.username + ": " + msg.author.id + "\n " + msg.content, (err) => {
+  if(msg.content.startsWith('$') || msg.content === "ily" || msg.content === "Ily" || msg.content === "i love you" || msg.content === "I love you" || msg.content === "juliet" || msg.content.startsWith("Wyd") || msg.content.startsWith("wyd") || msg.content === "gawa nyo" || triggerSad.some(word => msg.content.includes(word))){
 
-    // In case of a error throw err.
-    if (err) throw err;
-    })
+      fs.writeFile("logs/" + cRightNow, currentDate.getHours() +":" + currentDate.getMinutes() + " -> " + msg.author.id + ": " + msg.author.username + ": " + msg.content + "\n", { flag: 'a+' }, function (err) {
+        if (err) throw err;
+    });
 
-  if(msg.content.startsWith('$') || msg.content === "ily" || msg.content === "Ily" || msg.content === "i love you" || msg.content === "juliet"){
-      console.log(msg.author.username + ": " + msg.author.id + "\n " + msg.content);
+      console.log(msg.author.username + ": " + msg.author.id + ": " + msg.content);
   }
 
   
@@ -147,10 +155,11 @@ client.on("message", msg => {
   if(msg.content === "$olet"){
     msg.reply("Hi babyyyyy!")
   }
-  if(msg.content === "Wyd" || msg.content === "wyd" || msg.content === "gawa nyo"){
+  if(msg.content.startsWith("Wyd") || msg.content.startsWith("wyd") || msg.content === "gawa nyo"){
     var randomElement = wyd[Math.floor(Math.random() * wyd.length)];
           msg.reply(randomElement);
   }
+
   db.get("responding").then(responding =>{
       if(responding && triggerSad.some(word => msg.content.includes(word))){
       db.get("respSad").then(respSad => {
