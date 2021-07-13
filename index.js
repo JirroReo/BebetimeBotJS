@@ -1,5 +1,6 @@
 const Discord = require("discord.js")
 const fetch = require("node-fetch")
+const FormData = require('form-data');
 //const keepAlive = require("./server")
 const Database = require("@replit/database")
 const fs = require('fs')
@@ -105,13 +106,38 @@ function getYesNo(){
   })
 }
 
+/*async function traceMoe(msg){
+    let messageAttachment = msg.attachments.size > 0 ? msg.attachments.array()[0].url : null;
+    if (messageAttachment){
+        var imageBlob = messageAttachment;
+        const formData = new FormData();
+        formData.append("image", imageBlob);
+        return await fetch("https://api.trace.moe/search", {
+        method: "POST",
+        body: formData,
+        }).then((e) => { 
+            return e.json()
+        }).then(res => {
+            msg.channel.send(res["result"]["filename"]);
+        }); 
+    } else {
+        msg.reply("`**Usage** = $trace <attach anime frame>``");
+    }
+} */
+
 function logCommand(msg){
 
     let currentDate = new Date();
     let cDay = currentDate.getDate()
+    if (cDay < 10){
+        cDay = "0" + cDay;
+    }
     let cMonth = currentDate.getMonth() + 1
+    if (Number(cMonth) < 10){
+        cMonth = "0" + cMonth;
+    }
     let cYear = currentDate.getFullYear()
-    let cRightNow = cDay + "-" + cMonth + "-" + cYear + ".txt"
+    let cRightNow = cMonth + "-" + cDay + "-" + cYear + ".txt"
 
     fs.writeFile("logs/" + cRightNow, currentDate.getHours() +":" + currentDate.getMinutes() + " -> " + msg.author.id + ": " + msg.author.username + ": " + msg.content + "\n", { flag: 'a+' }, function (err) {
         if (err) throw err;
@@ -123,9 +149,15 @@ function logCommand(msg){
 client.on("ready", () => {
 let currentDate = new Date();
 let cDay = currentDate.getDate()
+if (Number(cDay) < 10){
+        cDay = "0" + cDay;
+    }
 let cMonth = currentDate.getMonth() + 1
+if (Number(cMonth) < 10){
+        cMonth = "0" + cMonth;
+    }
 let cYear = currentDate.getFullYear()
-let cRightNow = cDay + "-" + cMonth + "-" + cYear + ".txt"
+let cRightNow = cMonth + "-" + cDay + "-" + cYear + ".txt"
 
   console.log(`Logged in as ${client.user.tag}!`)
   fs.writeFile("logs/" + cRightNow,` Logged in as ${client.user.tag}! \n`, { flag: 'a+' }, function (err) {
@@ -210,6 +242,12 @@ client.on("message", msg => {
         msg.channel.send("`Usage: $ask <question>`")
     }
   }
+
+  if(msg.content.startsWith("$trace")){
+    logCommand(msg);
+    msg.channel.send("`Unfortunately, this feature is still in development.`")
+    /*traceMoe(msg);*/
+  }
   
   if(msg.content.startsWith("$new")){
     logCommand(msg);
@@ -263,7 +301,8 @@ client.on("message", msg => {
    "**responding [on/off]** = Sets wether the bot responds to sad messages.",
    "**ping** = Checks for server availability, bot will reply `pong` if yes.",
    "**inspire** = Gives a random inspirational quote.",
-   "**ask** = Answers questions with a random yes or no."
+   "**ask** = Answers questions with a random yes or no.",
+   "**trace <anime frame>** = searches a database of anime for the given frame."
   ];
     msg.channel.send(help)
   }
