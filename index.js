@@ -23,7 +23,8 @@ const panlandi = [
     "(',,•ω•,,)♡ ehehehehehehehe i love u too ehehehehehehe (',,•ω•,,)♡"
 ]
 const plainIly = [
-    "i love you too baby ",
+    "Thanks, who doesnt?",
+    "i love you too bby ",
     "i love you more ",
     "i love you too, keep holding on okay baby? ",
     "i love you toooooo ",
@@ -104,6 +105,10 @@ function getYesNo(){
   }).then(data => {
     return data["answer"]
   })
+}
+
+function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /*async function traceMoe(msg){
@@ -198,11 +203,18 @@ client.on("message", msg => {
   if(msg.content === "ily" || msg.content === "Ily" || msg.content === "i love you"){
       logCommand(msg);
       if(msg.author.id == "748392260990795826" || msg.author.id == "820977885603037216"){ //Olet 
-        var randomElement = panlandi[Math.floor(Math.random() * panlandi.length)];
+        var randomElement = panlandi[Math.floor(Math.random() * (panlandi.length - 0 + 1) + 0)]; //rand num between 0 and arrsize, inclusive
           msg.reply(randomElement);
       } else {
-          var randomElement = plainIly[Math.floor(Math.random() * plainIly.length)];
-          msg.reply(randomElement + "<333");
+          var randomElement = Math.floor(Math.random() * (plainIly.length - 0 + 1) + 0) //rand num between 0 and arrsize, inclusive
+          if (randomElement == 0){
+                msg.reply(plainIly[randomElement]);
+                sleep(3000).then(() => {
+                msg.reply("Jk, of course i love you too stupid ♡( ◡‿◡ )");
+                })
+          } else {
+            msg.reply(plainIly[randomElement] + "<333");              
+          }
       }
   }
 
@@ -215,6 +227,7 @@ client.on("message", msg => {
     logCommand(msg);
     msg.reply("Hi babyyyyy!")
   }
+
   if(msg.content.startsWith("Wyd") || msg.content.startsWith("wyd") || msg.content === "gawa nyo"){
     logCommand(msg);
     var randomElement = wyd[Math.floor(Math.random() * wyd.length)];
@@ -231,6 +244,16 @@ client.on("message", msg => {
       })
     }
   })
+  
+  if(msg.content.startsWith("$status")){
+    if(msg.author.id == "616261191614070795") {//Jiro
+      status = msg.content.split("$status ")[1]
+      client.user.setActivity(status, {type: "LISTENING"}).catch(console.error)
+      msg.reply("`Command successful.`")
+    } else {
+        msg.reply("`Error: This command is only available to my creator. $contact for info.`")
+    }
+  }
 
   if(msg.content.startsWith("$ask")){
     logCommand(msg);
