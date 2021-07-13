@@ -126,7 +126,7 @@ function getYesNo(){
 } */
 
 function logCommand(msg){
-
+    // TODO Set Dates to local timezone
     let currentDate = new Date();
     let cDay = currentDate.getDate()
     if (cDay < 10){
@@ -147,22 +147,24 @@ function logCommand(msg){
 }
 
 client.on("ready", () => {
-let currentDate = new Date();
-let cDay = currentDate.getDate()
-if (Number(cDay) < 10){
-        cDay = "0" + cDay;
-    }
-let cMonth = currentDate.getMonth() + 1
-if (Number(cMonth) < 10){
-        cMonth = "0" + cMonth;
-    }
-let cYear = currentDate.getFullYear()
-let cRightNow = cMonth + "-" + cDay + "-" + cYear + ".txt"
+    let currentDate = new Date();
+    let cDay = currentDate.getDate()
+    if (Number(cDay) < 10){
+            cDay = "0" + cDay;
+        }
+    let cMonth = currentDate.getMonth() + 1
+    if (Number(cMonth) < 10){
+            cMonth = "0" + cMonth;
+        }
+    let cYear = currentDate.getFullYear()
+    let cRightNow = cMonth + "-" + cDay + "-" + cYear + ".txt"
 
   console.log(`Logged in as ${client.user.tag}!`)
   fs.writeFile("logs/" + cRightNow,` Logged in as ${client.user.tag}! \n`, { flag: 'a+' }, function (err) {
         if (err) throw err;
     });
+
+    client.user.setActivity('$help', {type: "LISTENING"}).catch(console.error)
 })
 
 client.on("message", msg => {
