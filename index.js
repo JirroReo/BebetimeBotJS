@@ -1,6 +1,5 @@
 const Discord = require("discord.js")
 const fetch = require("node-fetch")
-const FormData = require('form-data');
 //const keepAlive = require("./server")
 const Database = require("@replit/database")
 const fs = require('fs')
@@ -10,11 +9,13 @@ const db = new Database()
 const client = new Discord.Client()
 
 const triggerSad = ["sad", "sadhours", "kms", "iwannadie", "sadboi hours"]
+
 const initialRespSad = [
   "Cheer up!",
   "Hang in there!",
   "It's probably as not as bad as you think."
 ]
+
 const panlandi = [
     "(♡˙︶˙♡) I love u too baby (/ε＼*)",
     "(´｡• ᵕ •｡`) ♡ i wuv u 2 bb Owet ('｡• ᵕ •｡') ♡",
@@ -30,6 +31,7 @@ const plainIly = [
     "i love you toooooo ",
     "ily too, things will be better okay? "
 ]
+
 const wyd = [
     "Nothing much bb, jus thinking about u (´∩｡• ᵕ •｡∩`)",
     "Just idlinggggg, how about u baby ( ◡‿◡ *)",
@@ -37,6 +39,8 @@ const wyd = [
     "idk, jus daydreaming of a future wit u (*ﾉωﾉ)",
     "nothing really, just admiring u from afar (* ^ ω ^)"
 ]
+
+let bonkedUsers = []
 
 db.get("respSad").then(respSad => {
   if(!respSad || respSad.length < 1){
@@ -245,6 +249,17 @@ client.on("message", msg => {
     }
   })
   
+  if(msg.content.startsWith("$bonk")){
+    logCommand(msg);
+    msg.channel.send("`Unfortunately, this feature is still in development.`")
+   /*var toBonk = msg.content.split(' ')
+    for (var bonker in toBonk) {
+        if (bonker.startsWith("<@!") && bonker.endsWith(">")) {
+            bonkedUsers.push(toBonk.slice(3, -1))
+            msg.channel.send(bonker + " has been bonked!")
+        }
+    } */
+  } 
   if(msg.content.startsWith("$status")){
     if(msg.author.id == "616261191614070795") {//Jiro
       status = msg.content.split("$status ")[1]
@@ -327,7 +342,8 @@ client.on("message", msg => {
    "**ping** = Checks for server availability, bot will reply `pong` if yes.",
    "**inspire** = Gives a random inspirational quote.",
    "**ask** = Answers questions with a random yes or no.",
-   "**trace <anime frame>** = searches a database of anime for the given frame."
+   "**trace <anime frame>** = searches a database of anime for the given frame.",
+   "**bonk <@user>** = Bonks user, blocking them from nsfw commands."
   ];
     msg.channel.send(help)
   }
