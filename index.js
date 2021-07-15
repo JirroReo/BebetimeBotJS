@@ -239,6 +239,7 @@ client.on("message", msg => {
   }
 
   db.get("responding").then(responding =>{
+      msg.content = msg.content.toLowerCase()
       if(responding && triggerSad.some(word => msg.content.includes(word))){
       db.get("respSad").then(respSad => {
         const response = respSad[Math.floor(Math.random()*respSad.length)]
