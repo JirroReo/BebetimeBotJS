@@ -323,7 +323,7 @@ client.on("message", msg => {
     let contact = [
         "**Twitter** https://www.twitter.com/xreoji",
         "**GitHub** https://www.github.com/JirroReo",
-        "**My source code** https://www.github.com/JirroReo/BebetimeBotJS"
+        "**Source Code** https://www.github.com/JirroReo/BebetimeBotJS"
     ]
     msg.channel.send(contact);
   }
