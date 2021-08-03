@@ -487,6 +487,7 @@ client.on("message", msg => {
    "Prefix is `$`",
    "**help** = Sends this message.",
    "**contact** = Author contact information.",
+   "**axo** = Sends a random picture of an axolotl, with a random fact.",
    "**cat** = Sends a random picture, gif, or video of a cat.",
    "**dog** = Like **cat** but dog.",
    "**shiba** = Like **dog** but *犬*.",

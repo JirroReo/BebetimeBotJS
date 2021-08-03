@@ -82,3 +82,5 @@
 12:50 -> 748392260990795826: jespaghetti: $axo
 12:50 -> 748392260990795826: jespaghetti: $dog
 12:50 -> 748392260990795826: jespaghetti: $cat
+12:53 -> 616261191614070795: 지로: $fox
+ Logged in as Bebetime Bot#0288! 
