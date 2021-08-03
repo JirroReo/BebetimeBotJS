@@ -115,6 +115,12 @@ function getYesNo(){
   })
 }
 
+function getShibe(n){
+  return fetch("http://shibe.online/api/shibes?count=" + n + "&urls=true&httpsUrls=true").then(res => {
+      return res.json()
+  })
+}
+
 function getCrypto(message){
     // message.guild.channels.cache.find(channel => channel.name === "channel-name").id;
     var link = "http://api.coinlayer.com/api/live?access_key=" + COINLAYER_API_KEY + "&symbols=BTC,ETH,BNB"
@@ -275,6 +281,22 @@ client.on("message", msg => {
     getDog().then(dog => msg.channel.send(dog))
   }
 
+  if(msg.content.startsWith("$shiba") || msg.content.startsWith("$Shiba")){
+    logCommand(msg);
+    msg.content.toLowerCase()
+    n = parseInt(msg.content.split("$shiba ")[1])
+    if (typeof n === 'number' && n <= 10 && n > 0){
+        getShibe(n).then(res =>{
+            for(var i = 0; i < res.length; i++){
+                msg.channel.send(res[i])
+            }
+        })
+    } else {
+        msg.channel.send("`Usage: $shiba <number of dogs u want [1-10]>`")
+        msg.channel.send("`Ex: $shiba 3`")
+    } 
+  }
+
   if(msg.content === "ily" || msg.content === "Ily" || msg.content === "i love you"){
       logCommand(msg);
       if(msg.author.id == "748392260990795826" || msg.author.id == "820977885603037216"){ //Olet 
@@ -406,6 +428,7 @@ client.on("message", msg => {
    "**contact** = Author contact information.",
    "**cat** = Sends a random picture, gif, or video of a cat.",
    "**dog** = Like **cat** but dog.",
+   "**shiba** = Like **dog** but *犬*.",
    "**fox** = Like **dog** but smaller and dont bark.",
    "**new [message]** = Adds message to responses for sad messages.",
    "**list** = Lists all responses for sad messages",
@@ -413,7 +436,9 @@ client.on("message", msg => {
    "**responding [on/off]** = Sets wether the bot responds to sad messages.",
    "**ping** = Checks for server availability, bot will reply `pong` if yes.",
    "**inspire** = Gives a random inspirational quote.",
+   "**joke** = Gives a random - sometimes dark - joke.",
    "**ask** = Answers questions with a random yes or no.",
+   "**rate** = Sends the latest rates for Bitcoin, Ethereum, and BNB.",
    "**trace <anime frame>** = searches a database of anime for the given frame.",
    "**bonk <@user>** = Bonks user, blocking them from nsfw commands."
   ];
