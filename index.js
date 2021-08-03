@@ -86,24 +86,42 @@ function getQuote(){
 function getCat(){
   return fetch("https://aws.random.cat/meow").then(res => {
     return res.json()
-  }).then(data => {
-    return data["file"]
+  }).then(res => {
+    const embed = new MessageEmbed()
+	.setColor('#E4E4DC')
+	.setTitle('Here\'s your Cat!')
+    .setImage(res["file"])
+	.setFooter("Meow meow!")
+
+    return embed
   })
 }
 
 function getFox(){
   return fetch("https://randomfox.ca/floof/").then(res => {
     return res.json()
-  }).then(data => {
-    return data["image"]
+  }).then(res => {
+    const embed = new MessageEmbed()
+	.setColor('#9C5D1F')
+	.setTitle('Here\'s your Fox!')
+    .setImage(res["image"])
+	.setFooter("What does a fox say?")
+
+    return embed
   })
 }
 
 function getDog(){
   return fetch("https://random.dog/woof.json?ref=apilist.fun").then(res => {
     return res.json()
-  }).then(data => {
-    return data["url"]
+  }).then(res => {
+    const embed = new MessageEmbed()
+	.setColor('#D1A253')
+	.setTitle('Here\'s your Dog!')
+    .setImage(res["url"])
+	.setFooter("Woof woof!")
+    
+    return embed
   })
 }
 
@@ -183,6 +201,22 @@ function getJoke(message) {
         }
     })
 }  
+
+function getAxo(){
+    return fetch("https://axoltlapi.herokuapp.com/").then(res => {
+        return res.json()
+    }).then(res => {
+    console.log(res["url"])    
+    console.log(res["facts"])    
+    const embed = new MessageEmbed()
+	.setColor('#FF36C8')
+	.setTitle('Here\'s your Axolotl!')
+    .setImage(res["url"])
+	.setFooter(res["facts"])
+
+    return embed
+    })
+}
 
 function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
@@ -285,6 +319,11 @@ client.on("message", msg => {
   if(msg.content === "$dog" || msg.content === "$Dog"){
     logCommand(msg);
     getDog().then(dog => msg.channel.send(dog))
+  }
+
+  if(msg.content === "$axo" || msg.content === "$Axo"){
+    logCommand(msg);
+    getAxo().then(axo => msg.channel.send(axo))
   }
 
   if(msg.content.startsWith("$shiba") || msg.content.startsWith("$Shiba")){
