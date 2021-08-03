@@ -3,10 +3,14 @@ const fetch = require("node-fetch")
 //const keepAlive = require("./server")
 const Database = require("@replit/database")
 const fs = require('fs')
+const { MessageEmbed } = require('discord.js');
 
 
 const db = new Database()
+require('discord-reply');
 const client = new Discord.Client()
+const COINLAYER_API_KEY = process.env['COINLAYER_API_KEY']
+
 
 const triggerSad = ["sad", "sadhours", "kms", "iwannadie", "sadboi hours"]
 
@@ -111,6 +115,63 @@ function getYesNo(){
   })
 }
 
+function getCrypto(message){
+    // message.guild.channels.cache.find(channel => channel.name === "channel-name").id;
+    var link = "http://api.coinlayer.com/api/live?access_key=" + COINLAYER_API_KEY + "&symbols=BTC,ETH,BNB"
+    return fetch(link).then(response => {
+        return response.json()
+    }).then(data => {
+
+    let currentDate = new Date();
+    let cDay = currentDate.getDate()
+    if (cDay < 10){
+        cDay = "0" + cDay;
+    }
+    let cMonth = currentDate.getMonth() + 1
+    if (Number(cMonth) < 10){
+        cMonth = "0" + cMonth;
+    }
+    let cYear = currentDate.getFullYear()
+    let cRightNow = cMonth + "-" + cDay + "-" + cYear
+
+    const exampleEmbed = new MessageEmbed()
+	.setColor('#0099ff')
+	.setTitle('Exchange rates for today')
+	.setDescription('As of ' + cRightNow)
+	.addFields(
+		{ name: 'Bitcoin', value: '$' + data["rates"]["BTC"] },
+		{ name: 'Ethereum', value: '$' + data["rates"]["ETH"]},
+		{ name: 'BNB', value: '$' + data["rates"]["BNB"] },
+	).setTimestamp()
+	.setFooter('Happy trading! ily UwU');
+        return exampleEmbed
+    })
+}
+
+function getJoke(message) {
+    const baseURL = "https://v2.jokeapi.dev";
+    const categories = ["Any", "Dark", "Programming", "Misc", "Pun", "Spooky"];
+    const params = [
+        // "blacklistFlags=nsfw,religious,racist",
+        // "idRange=0-100"
+    ];
+
+    return fetch(`${baseURL}/joke/${categories.join(",")}`).then(res => {
+        return res.json()
+    }).then(randomJoke => {
+        if(randomJoke["type"] == "single"){
+            // If type == "single", the joke only has the "joke" property
+            message.channel.send(randomJoke["joke"])
+        }else{
+            // If type == "twopart", the joke has the "setup" and "delivery" properties
+            message.channel.send(randomJoke["setup"])
+            setTimeout(() => {
+                message.channel.send(randomJoke["delivery"])
+            }, 3000);
+        }
+    })
+}  
+
 function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -181,12 +242,22 @@ client.on("message", msg => {
 
   if(msg.content === "$ping"){
     logCommand(msg);
-    msg.reply("pong")
+    msg.lineReplyNoMention("pong")
   }
   
   if(msg.content === "$inspire"){
     logCommand(msg);
     getQuote().then(quote => msg.channel.send(quote))
+  }
+
+  if(msg.content === "$rate"){
+    logCommand(msg);
+    getCrypto(msg).then(response => msg.channel.send(response))
+  }
+
+  if(msg.content === "$joke"){
+    logCommand(msg);
+    getJoke(msg)
   }
 
   if(msg.content === "$cat" || msg.content === "$Cat"){
@@ -208,34 +279,34 @@ client.on("message", msg => {
       logCommand(msg);
       if(msg.author.id == "748392260990795826" || msg.author.id == "820977885603037216"){ //Olet 
         var randomElement = panlandi[Math.floor(Math.random() * (panlandi.length - 0 + 1) + 0)]; //rand num between 0 and arrsize, inclusive
-          msg.reply(randomElement);
+          msg.lineReplyNoMention(randomElement);
       } else {
           var randomElement = Math.floor(Math.random() * (plainIly.length - 0 + 1) + 0) //rand num between 0 and arrsize, inclusive
           if (randomElement == 0){
-                msg.reply(plainIly[randomElement]);
+                msg.lineReplyNoMention(plainIly[randomElement]);
                 sleep(3000).then(() => {
-                msg.reply("Jk, of course i love you too stupid ♡( ◡‿◡ )");
+                msg.lineReplyNoMention("Jk, of course i love you too stupid ♡( ◡‿◡ )");
                 })
           } else {
-            msg.reply(plainIly[randomElement] + "<333");              
+            msg.lineReplyNoMention(plainIly[randomElement] + "<333");              
           }
       }
   }
 
   if(msg.content === "hi"){
     logCommand(msg);
-    msg.reply("hi");
+    msg.lineReplyNoMention("hi");
   }
   
   if(msg.content === "$olet"){
     logCommand(msg);
-    msg.reply("Hi babyyyyy!")
+    msg.lineReplyNoMention("Hi babyyyyy!")
   }
 
   if(msg.content.startsWith("Wyd") || msg.content.startsWith("wyd") || msg.content === "gawa nyo"){
     logCommand(msg);
     var randomElement = wyd[Math.floor(Math.random() * wyd.length)];
-          msg.reply(randomElement);
+          msg.lineReplyNoMention(randomElement);
   }
 
   db.get("responding").then(responding =>{
@@ -245,7 +316,7 @@ client.on("message", msg => {
         const response = respSad[Math.floor(Math.random()*respSad.length)]
 
       logCommand(msg);
-      msg.reply(response)
+      msg.lineReplyNoMention(response)
       })
     }
   })
@@ -265,9 +336,9 @@ client.on("message", msg => {
     if(msg.author.id == "616261191614070795") {//Jiro
       status = msg.content.split("$status ")[1]
       client.user.setActivity(status, {type: "LISTENING"}).catch(console.error)
-      msg.reply("`Command successful.`")
+      msg.lineReplyNoMention("`Command successful.`")
     } else {
-        msg.reply("`Error: This command is only available to my creator. $contact for info.`")
+        msg.lineReplyNoMention("`Error: This command is only available to my creator. $contact for info.`")
     }
   }
 
@@ -315,7 +386,7 @@ client.on("message", msg => {
   
   if(msg.content === "juliet"){
     logCommand(msg);
-    msg.reply("titi");
+    msg.lineReplyNoMention("haha juliet titi");
   }
 
   if(msg.content === "$contact"){

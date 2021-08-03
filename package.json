@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@replit/database": "^2.0.0",
+    "discord-reply": "^0.1.2",
     "discord.js": "^12.5.1",
     "express": "^4.17.1",
     "form-data": "^4.0.0",
