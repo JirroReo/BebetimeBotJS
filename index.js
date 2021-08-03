@@ -121,6 +121,12 @@ function getShibe(n){
   })
 }
 
+function getBirb(n){
+  return fetch("http://shibe.online/api/birds?count=" + n + "&urls=true&httpsUrls=true").then(res => {
+      return res.json()
+  })
+}
+
 function getCrypto(message){
     // message.guild.channels.cache.find(channel => channel.name === "channel-name").id;
     var link = "http://api.coinlayer.com/api/live?access_key=" + COINLAYER_API_KEY + "&symbols=BTC,ETH,BNB"
@@ -297,6 +303,22 @@ client.on("message", msg => {
     } 
   }
 
+  if(msg.content.startsWith("$birb") || msg.content.startsWith("$Birb")){
+    logCommand(msg);
+    msg.content.toLowerCase()
+    n = parseInt(msg.content.split("$birb ")[1])
+    if (typeof n === 'number' && n <= 10 && n > 0){
+        getBirb(n).then(res =>{
+            for(var i = 0; i < res.length; i++){
+                msg.channel.send(res[i])
+            }
+        })
+    } else {
+        msg.channel.send("`Usage: $birb <number of birbs u want [1-10]>`")
+        msg.channel.send("`Ex: $birb 3`")
+    } 
+  }
+
   if(msg.content === "ily" || msg.content === "Ily" || msg.content === "i love you"){
       logCommand(msg);
       if(msg.author.id == "748392260990795826" || msg.author.id == "820977885603037216"){ //Olet 
@@ -430,6 +452,7 @@ client.on("message", msg => {
    "**dog** = Like **cat** but dog.",
    "**shiba** = Like **dog** but *犬*.",
    "**fox** = Like **dog** but smaller and dont bark.",
+   "**birb** = Like **fox** but with tiny wings.",
    "**new [message]** = Adds message to responses for sad messages.",
    "**list** = Lists all responses for sad messages",
    "**del [index]** = Deletes message at index from sad message reponses.",
