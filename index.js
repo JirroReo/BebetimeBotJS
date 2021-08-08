@@ -178,27 +178,65 @@ function getCrypto(message){
     })
 }
 
-function getJoke(message) {
+function getJoke(message, k1, k2) {
     const baseURL = "https://v2.jokeapi.dev";
-    const categories = ["Any", "Dark", "Programming", "Misc", "Pun", "Spooky"];
-    const params = [
+    var categories = [];
+    var params = [
         // "blacklistFlags=nsfw,religious,racist",
         // "idRange=0-100"
     ];
 
-    return fetch(`${baseURL}/joke/${categories.join(",")}`).then(res => {
+    switch (k1) {
+      case "help":
+        message.lineReplyNoMention("`Categories: Any, Dark, Code, Misc, Pun, Spooky \nOptional parameter: safe \nUsage: $joke <category> <parameter>`")
+        return
+      case "any":
+        categories = ["Any"]
+        break
+      case "dark":
+        categories = ["Dark"]
+        break
+      case "code":
+        categories = ["Programming"]
+        break
+      case "misc":
+        categories = ["Misc"]
+        break
+      case "pun":
+        categories = ["Pun"]
+        break
+      case "spooky":
+        categories = ["Spooky"]
+        break
+      case "safe":
+         params = ["blacklistFlags=nsfw,religious,racist","?safe-mode"]
+         break        
+      default:
+        categories = ["Any", "Dark", "Programming", "Misc", "Pun", "Spooky"] 
+    }
+
+    switch (k2) {
+      case "safe":
+         params = ["blacklistFlags=nsfw,religious,racist","?safe-mode"]
+         break
+      default:
+         params = []
+    }
+
+    return fetch(`${baseURL}/joke/${categories.join(",")}?type=twopart`).then(res => {
         return res.json()
     }).then(randomJoke => {
-        if(randomJoke["type"] == "single"){
-            // If type == "single", the joke only has the "joke" property
-            message.channel.send(randomJoke["joke"])
-        }else{
-            // If type == "twopart", the joke has the "setup" and "delivery" properties
-            message.channel.send(randomJoke["setup"])
-            setTimeout(() => {
-                message.channel.send(randomJoke["delivery"])
-            }, 3000);
-        }
+        const embed = new MessageEmbed()
+        .setColor('#0B1031')
+        .setTitle(randomJoke["setup"])
+        .setDescription(randomJoke["delivery"])
+        //.setAuthor(randomJoke["id"] + " | " + randomJoke["category"])
+
+        message.channel.send(embed)
+        /*message.channel.send(randomJoke["setup"])
+        setTimeout(() => {
+            message.channel.send(randomJoke["delivery"])
+        }, 3000); */
     })
 }  
 
@@ -301,9 +339,11 @@ client.on("message", msg => {
     getCrypto(msg).then(response => msg.channel.send(response))
   }
 
-  if(msg.content === "$joke"){
+  if(msg.content.startsWith("$joke")){
+    k1 = msg.content.split(" ")[1]
+    k2 = msg.content.split(" ")[2]
     logCommand(msg);
-    getJoke(msg)
+    getJoke(msg, k1, k2)
   }
 
   if(msg.content === "$cat" || msg.content === "$Cat"){
@@ -485,7 +525,7 @@ client.on("message", msg => {
   if(msg.content === "$help"){
    let help = [
    "Prefix is `$`",
-   "**help** = Sends this message.",
+   "**help** = .",
    "**contact** = Author contact information.",
    "**axo** = Sends a random picture of an axolotl, with a random fact.",
    "**cat** = Sends a random picture, gif, or video of a cat.",
@@ -499,13 +539,45 @@ client.on("message", msg => {
    "**responding [on/off]** = Sets wether the bot responds to sad messages.",
    "**ping** = Checks for server availability, bot will reply `pong` if yes.",
    "**inspire** = Gives a random inspirational quote.",
-   "**joke** = Gives a random - sometimes dark - joke.",
+   "**joke** = Gives a random - sometimes dark - joke. `$joke help` for more.`",
    "**ask** = Answers questions with a random yes or no.",
    "**rate** = Sends the latest rates for Bitcoin, Ethereum, and BNB.",
    "**trace <anime frame>** = searches a database of anime for the given frame.",
    "**bonk <@user>** = Bonks user, blocking them from nsfw commands."
   ];
-    msg.channel.send(help)
+
+  const embed = new MessageEmbed()
+	.setColor('#1B81A2')
+	.setTitle('**Bebetime Bot Command List**')
+    .setAuthor(
+    '지로#0775',
+    'https://1.bp.blogspot.com/-9b6LpfTSBS8/Xtgi1TWhnQI/AAAAAAAAZaY/hc5od2uf30sFVeCvlwXvbZuaWZzVuYU7ACLcBGAsYHQ/w914-h514-p-k-no-nu/chaeyoung-twice-more-and-more-uhdpaper.com-4K-7.2086-wp.thumbnail.jpg',
+    'https://discordapp.com/users/616261191614070795')
+    .setThumbnail('https://vignette.wikia.nocookie.net/gravityfalls/images/d/d3/S2e8_time_baby_silence.png/revision/latest?cb=20141123055142')
+    .addFields(
+        { name: '**$help**', value: 'Sends this message' },
+        { name: '**$contact**', value: 'Author contact information' },
+        { name: '**$axo**', value: 'Sends a random picture of an axolotl, with a random fact' },
+        { name: '**$cat**', value: 'Sends a random picture, gif, or video of a cat' },
+        { name: '**$birb**', value: 'Like **dog** but with wings' },
+        { name: '**$dog**', value: 'Like **cat** but dog', inline: true },
+        { name: '**$shiba**', value: 'Like **dog** but *犬*', inline: true },
+        { name: '**$fox**', value: 'What does a fox say', inline: true },
+        { name: '**$new [message]**', value: 'Adds sad message', inline: true },
+        { name: '**$del [index]**', value: 'Deletes sad message', inline: true },
+        { name: '**$list**', value: 'Lists sad messages', inline: true },
+        { name: '**$responding [on/off]**', value: 'Sets wether the bot responds to sad messages'},
+        { name: '**$ping**', value: 'Checks if bot is running, will reply `pong` if yes'},
+        { name: '**$inspire**', value: 'Gives random inspirational quote'},
+        { name: '**$joke**', value: 'Gives a random - sometimes dark - joke. `$joke help` for more'},
+        { name: '**$ask <q>**', value: 'Answers question q with a yes or no'},
+        { name: '**$rate**', value: 'Sends the latest rates for Bitcoin, Ethereum, and BNB.'},
+    )
+    .setFooter('Admin commands and commands still in development not listed')
+    .setTimestamp()
+
+    // msg.channel.send(help)
+    msg.channel.send(embed)
   }
 
   if(msg.content.startsWith("$responding")){
