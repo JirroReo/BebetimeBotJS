@@ -550,8 +550,7 @@ client.on("message", msg => {
 	.setColor('#1B81A2')
 	.setTitle('**Bebetime Bot Command List**')
     .setAuthor(
-    '지로#0775',
-    'https://1.bp.blogspot.com/-9b6LpfTSBS8/Xtgi1TWhnQI/AAAAAAAAZaY/hc5od2uf30sFVeCvlwXvbZuaWZzVuYU7ACLcBGAsYHQ/w914-h514-p-k-no-nu/chaeyoung-twice-more-and-more-uhdpaper.com-4K-7.2086-wp.thumbnail.jpg',
+    '지로#0775', client.users.cache.get("616261191614070795").avatarURL() ,
     'https://discordapp.com/users/616261191614070795')
     .setThumbnail('https://vignette.wikia.nocookie.net/gravityfalls/images/d/d3/S2e8_time_baby_silence.png/revision/latest?cb=20141123055142')
     .addFields(
