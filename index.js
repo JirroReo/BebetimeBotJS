@@ -1,9 +1,10 @@
 const Discord = require("discord.js")
 const fetch = require("node-fetch")
-//const keepAlive = require("./server")
+const keepAlive = require("./server")
 const Database = require("@replit/database")
 const fs = require('fs')
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js')
+
 
 
 const db = new Database()
@@ -83,6 +84,21 @@ function getQuote(){
   })
 }
 
+function getName(name){
+    var url = "https://api.agify.io/?name=" + name
+    return fetch(url).then(res => {
+        return res.json()
+    }).then(data => {
+        const embed = new MessageEmbed()
+        .setColor('LUMINOUS_VIVID_PINK')
+        .setTitle("How old are you based on your name?")
+        .setDescription(data["name"] + ", " + data["age"] + " years old.")
+        .setFooter("Based on " + data["count"] + " entries in the dataset.")
+
+        return embed
+    })
+}
+
 function getCat(){
   return fetch("https://aws.random.cat/meow").then(res => {
     return res.json()
@@ -92,6 +108,20 @@ function getCat(){
 	.setTitle('Here\'s your Cat!')
     .setImage(res["file"])
 	.setFooter("Meow meow!")
+
+    return embed
+  })
+}
+
+function getDuck(){
+  return fetch("https://random-d.uk/api/quack?format=json").then(res => {
+    return res.json()
+  }).then(res => {
+    const embed = new MessageEmbed()
+	.setColor('#5AC161')
+	.setTitle('Quack!')
+    .setImage(res["url"])
+	.setFooter("*snatches your bread*")
 
     return embed
   })
@@ -120,9 +150,18 @@ function getDog(){
 	.setTitle('Here\'s your Dog!')
     .setImage(res["url"])
 	.setFooter("Woof woof!")
-    
+
     return embed
-  })
+   })
+//     .then(embed => {
+//     return fetch("https://dog-facts-api.herokuapp.com/api/v1/resources/dogs?number=1").then(res => {
+//         return [embed, res.json()]
+//     }).then(res => {
+//         res[0].setFooter(res[1]["fact"])
+
+//         return res[0]
+//     })
+//   })
 }
 
 function getYesNo(){
@@ -351,6 +390,17 @@ client.on("message", msg => {
     getCat().then(cat => msg.channel.send(cat))
   }
 
+  if(msg.content.startsWith("$name") || msg.content.startsWith("$Cat")){
+    logCommand(msg);
+    var name = msg.content.split("$name ")[1].charAt(0).toUpperCase() + msg.content.split("$name ")[1].slice(1)
+    getName(name).then(name => msg.channel.send(name))
+  }
+
+  if(msg.content === "$duck" || msg.content === "$Duck"){
+    logCommand(msg);
+    getDuck().then(duck => msg.channel.send(duck))
+  }
+
   if(msg.content === "$fox" || msg.content === "$Fox"){
     logCommand(msg);
     getFox().then(fox => msg.channel.send(fox))
@@ -377,11 +427,11 @@ client.on("message", msg => {
             }
         })
     } else {
-        msg.channel.send("`Usage: $shiba <number of dogs u want [1-10]>`")
-        msg.channel.send("`Ex: $shiba 3`")
-    } 
-  }
-
+        getShibe(1).then(res =>{
+           msg.channel.send(res)
+        })
+    }
+ }
   if(msg.content.startsWith("$birb") || msg.content.startsWith("$Birb")){
     logCommand(msg);
     msg.content.toLowerCase()
@@ -393,9 +443,33 @@ client.on("message", msg => {
             }
         })
     } else {
-        msg.channel.send("`Usage: $birb <number of birbs u want [1-10]>`")
-        msg.channel.send("`Ex: $birb 3`")
+        getBirb(1).then(res =>{
+           msg.channel.send(res)
+        })
     } 
+  }
+
+  if(msg.content.startsWith("$dead")){
+    if(msg.author.id == "616261191614070795") { // Jiro
+        var color = msg.content.substring(
+            msg.content.indexOf("/") + 1, 
+            msg.content.lastIndexOf("/")
+        );
+        const embed = new MessageEmbed()
+        .setColor('GREYPLE')
+        .setTitle('Is the server alive today?')
+        .setDescription("Nope, it's dead.")
+        .setFooter("This is an automated message.")
+
+        if(msg.content.split("$dead ")[1]){
+            embed.setDescription(msg.content.split("$dead ")[1])
+        }
+        if(color){
+            embed.setColor(color)
+        }
+
+        client.channels.cache.get('690780056670306355').send(embed);
+    }
   }
 
   if(msg.content === "ily" || msg.content === "Ily" || msg.content === "i love you"){
@@ -469,9 +543,12 @@ client.on("message", msg => {
     logCommand(msg);
     question = msg.content.split("$ask ")[1]
     if (question){    
-        msg.channel.send("Question: *" + question + "?*\n")
-        getYesNo().then(res => {
-            msg.channel.send("Answer: _**" + res + "!**_")
+        getYesNo().then(answer => {
+            const embed = new MessageEmbed()
+            .setColor('FUCHSIA')
+            .setTitle("*" + question + "?*")
+            .setDescription("**" + answer + "!**")
+            msg.channel.send(embed)
         })
     } else {
         msg.channel.send("`Usage: $ask <question>`")
@@ -533,6 +610,7 @@ client.on("message", msg => {
    "**shiba** = Like **dog** but *犬*.",
    "**fox** = Like **dog** but smaller and dont bark.",
    "**birb** = Like **fox** but with tiny wings.",
+   "**duck** = Like **birb** but steals your bread.",
    "**new [message]** = Adds message to responses for sad messages.",
    "**list** = Lists all responses for sad messages",
    "**del [index]** = Deletes message at index from sad message reponses.",
@@ -541,6 +619,7 @@ client.on("message", msg => {
    "**inspire** = Gives a random inspirational quote.",
    "**joke** = Gives a random - sometimes dark - joke. `$joke help` for more.`",
    "**ask** = Answers questions with a random yes or no.",
+   "**name** = Guess your age based on your name and historical data.",
    "**rate** = Sends the latest rates for Bitcoin, Ethereum, and BNB.",
    "**trace <anime frame>** = searches a database of anime for the given frame.",
    "**bonk <@user>** = Bonks user, blocking them from nsfw commands."
@@ -559,6 +638,7 @@ client.on("message", msg => {
         { name: '**$axo**', value: 'Sends a random picture of an axolotl, with a random fact' },
         { name: '**$cat**', value: 'Sends a random picture, gif, or video of a cat' },
         { name: '**$birb**', value: 'Like **dog** but with wings' },
+        { name: '**$duck**', value: 'Like **birb** but will steal your bread' },
         { name: '**$dog**', value: 'Like **cat** but dog', inline: true },
         { name: '**$shiba**', value: 'Like **dog** but *犬*', inline: true },
         { name: '**$fox**', value: 'What does a fox say', inline: true },
@@ -570,6 +650,7 @@ client.on("message", msg => {
         { name: '**$inspire**', value: 'Gives random inspirational quote'},
         { name: '**$joke**', value: 'Gives a random - sometimes dark - joke. `$joke help` for more'},
         { name: '**$ask <q>**', value: 'Answers question q with a yes or no'},
+        { name: '**name <name>**', value: ' Guess your age based on your name and historical data.' },
         { name: '**$rate**', value: 'Sends the latest rates for Bitcoin, Ethereum, and BNB.'},
     )
     .setFooter('Admin commands and commands still in development not listed')
@@ -595,5 +676,5 @@ client.on("message", msg => {
   }
 })
 
-//keepAlive()
+keepAlive()
 client.login(process.env.TOKEN)
