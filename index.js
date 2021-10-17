@@ -360,6 +360,21 @@ client.on("ready", () => {
     client.user.setActivity('$help', {type: "LISTENING"}).catch(console.error)
 })
 
+client.on("messageDelete", (messageDelete) => {
+
+  let DeleteEmbed = new MessageEmbed()
+  .setTimestamp()
+  .setTitle("**Deleted Message**")
+  .setColor("#fc3c3c")
+  .addField("Author", messageDelete.author.tag, true)
+  .addField("Channel", messageDelete.channel, true)
+  .addField("Server", messageDelete.guild, true)
+  .addField("Message", messageDelete.content)
+  .setFooter(`Message ID: ${messageDelete.id} | Author ID: ${messageDelete.author.id}`);
+
+  client.channels.cache.get('899253736403243048').send(DeleteEmbed);
+});
+
 client.on("message", msg => {
   if(msg.author.bot) return
 
