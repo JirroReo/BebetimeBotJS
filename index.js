@@ -643,9 +643,6 @@ client.on("message", msg => {
   const embed = new MessageEmbed()
 	.setColor('#1B81A2')
 	.setTitle('**Bebetime Bot Command List**')
-    .setAuthor(
-    '지로#0775', client.users.cache.get("616261191614070795").avatarURL() ,
-    'https://discordapp.com/users/616261191614070795')
     .setThumbnail('https://vignette.wikia.nocookie.net/gravityfalls/images/d/d3/S2e8_time_baby_silence.png/revision/latest?cb=20141123055142')
     .addFields(
         { name: '**$help**', value: 'Sends this message' },
